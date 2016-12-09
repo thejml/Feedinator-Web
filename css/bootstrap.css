@@ -7,8 +7,7 @@
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 .storyCard {
   float: left;
-  min-width: 200px;
-  max-width: 275px;
+  width: 295px;
   height: 200px;
   overflow: hidden;
   background: #F0F0F0;
@@ -40,8 +39,8 @@
 }
 
 .cardHeading {
-  float: left;
-  width: 225px;
+  margin-left: 20px;
+  margin-top: -16px;
   padding-left: 2px;
 }
 
@@ -66,6 +65,8 @@
 .cardSummary {
   margin-left: 32px;
   font-size: 14px;
+  float: left;
+  color: #2f2f2f;
 }
 
 div.NoCategory {
