@@ -1,0 +1,46 @@
+@font-face {
+	font-family: 'FjordOne-Regular';
+	src: url('/fonts/FjordOne-Regular.otf');
+	font-weight: normal;
+       	font-style: normal;
+}	
+
+@font-face {
+	font-family: 'BreeSerif-Regular';
+	src: url('/fonts/BreeSerif-Regular.otf');
+	font-weight: normal;
+       	font-style: normal;
+}	
+
+@font-face {
+	font-family: 'SpecialElite';
+	src: url('/fonts/SpecialElite.ttf');
+	font-weight: normal;
+       	font-style: normal;
+}	
+
+@font-face {
+	font-family: 'AftaSansThin-Regular';
+	src: url('/fonts/AftaSansThin-Regular.otf');
+	font-weight: normal;
+       	font-style: normal;
+}	
+
+@font-face {
+	font-family: 'AftaSansThin-Italic';
+	src: url('/fonts/AftaSansThin-Italic.otf');
+	font-weight: normal;
+       	font-style: normal;
+}	
+
+@font-face {
+	font-family: 'ArchitectsDaughterRegular';
+    	src: url('/fonts/ArchitectsDaughter-webfont.eot');
+    	src: url('/fonts/ArchitectsDaughter-webfont.eot?#iefix') format('embedded-opentype'),
+             url('/fonts/ArchitectsDaughter-webfont.woff') format('woff'),
+             url('/fonts/ArchitectsDaughter-webfont.ttf') format('truetype'),
+             url('/fonts/ArchitectsDaughter-webfont.svg#ArchitectsDaughterRegular') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
