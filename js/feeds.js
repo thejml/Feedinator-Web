@@ -40,7 +40,7 @@ function drawUpdate2(x,hilite,colors) {
 //			'<td><div class=listingDiv style="background-position: 0px '+(item.feedid*-32+32)+'px; width: 32px;height:32px;"></div></td>'+
 			'<div class="cardTime '+catClass+'">'+(new Date(item.pubdateseconds).toLocaleTimeString())+'</div>'+
 			'<img class="cardIcon" src="'+item.image+'"></div><div class="cardHeading"><a href="'+link+'" target=_blank class=storyHeading>'+title+'</a></div>'+
-			'<div class="cardExpander '+item.uuid+'-expand"><i class="fa fa-chevron-right" aria-hidden="true"></i></div>'+
+			'<div class="cardExpander '+item.uuid+'-expand"></div>'+
 			'<div class="cardSummary '+item.uuid+'-desc">'+item.description+'</div>'
 		).appendTo("#stories");
 	});

@@ -17,7 +17,7 @@
   border: 1px #000;
   border-style: solid;
   border-radius: 3px;
-  box-shadow: 6px 7px 9px #000000;
+  box-shadow: 6px 7px 9px #888888;
 }
 
 .storyHeading {
@@ -98,7 +98,7 @@ html {
 }
 body {
   color: #dddddd;
-  background-color: #1f1f1f;
+  background-color: #000000;
   margin: 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
