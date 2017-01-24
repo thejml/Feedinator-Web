@@ -10,7 +10,7 @@ $rest = new RESTInterface($feedinatorURL, 443, $proxy, $debug, $extraHeaders);
 function addFeed($url, array $post = NULL, array $options = array()) 
 { 
     if ($post==NULL) { return false; }
-
+    $url.='addfeed';
     $defaults = array( 
         CURLOPT_POST => 1, 
         CURLOPT_HEADER => 0, 
@@ -41,18 +41,67 @@ function deFeedURL($url) {
 	return preg_replace('/^feed:\/\//','http://',$url);
 }
 
-//{"category":1,"dateAdded":1364420689,"feedid":1,"image":"","lastDispatch":1391222035892,"lastUpdate":1391222035892,"lastUpdatedBy":"kanzaki","personal":0,"timeOffset":0,"title":"CNN World News","type":0,"url":"http://rss.cnn.com/rss/cnn_topstories.rss","who":1}
-$cat=sanitize($_POST['feedCategory']);
-$title=sanitize($_POST['feedTitle']);
-$url=deFeedURL(sanitize($_POST['feedURL']));
+function findValidFavIcon($baseURL) { 
+	// Add in logic to try for .png, .gif, or .jpg
+	return trim($baseURL,'/').'/favicon.ico';
+}
 
-$newFeed=array("category"=>$cat,"dateAdded"=>time(),"image"=>"","lastDispatch"=>time()*1000000,"lastUpdate"=>time()*1000000,"lastUpdatedBy"=>"","personal"=>0,"timeOffset"=>0,"title"=>$title,"type"=>0,"url"=>$url,"who"=>0);
+function decodeFeed($url,$debug=false) {
+	$feedInfo     = array();
+
+	$URLExp       = explode("/",$url);
+	$hostname     = $URLExp[2];
+	unset ($URLExp[0]); unset($URLExp[1]); unset($URLExp[2]);  //Get rid of 'http:', '', and hostname
+	$URI          = implode("/",$URLExp);
+	$proxy        = "";
+	$extraHeaders = array();
+	$feedREST     = new RESTInterface($hostname, 80, $proxy, $debug, $extraHeaders);
+	$dataHTML     = $feedREST->get('/'.$URI,false);
+	if ($debug) { var_dump($dataHTML); }
+	$xml          = simplexml_load_string($dataHTML);
+	$json         = json_encode($xml);
+	$decodedArray = json_decode($json,TRUE);
+
+	// Now we have info, let's fillin the blanks.
+	$feedInfo['title']       = $decodedArray['channel']['title'];
+	$feedInfo['description'] = $decodedArray['channel']['description'];
+	$feedInfo['icon']        = findValidFavIcon('https://'.$hostname);
+
+//http://rss.cnn.com/rss/cnn_topstories.rss
+	if (is_array($feedInfo['title']) || $feedInfo['title']=="") { 
+		$feedInfo['title'] = $hostname;
+	}
+
+	return $feedInfo;
+}
+
+//{"category":1,"dateAdded":1364420689,"feedid":1,"image":"","lastDispatch":1391222035892,"lastUpdate":1391222035892,"lastUpdatedBy":"kanzaki","personal":0,"timeOffset":0,"title":"CNN World News","type":0,"url":"http://rss.cnn.com/rss/cnn_topstories.rss","who":1}
+$feedInfo    = decodeFeed(sanitize($_POST['feedURL']),false);
+$cat         = sanitize($_POST['feedCategory']);
+$title       = $feedInfo['title'];
+$description = $feedInfo['description'];
+$image       = $feedInfo['icon'];
+$url         = deFeedURL(sanitize($_POST['feedURL']));
+$who         = 0; // Should figure out who's posting.
+
+$newFeed     = array(	"category"=>$cat,
+			"dateAdded"=>time(),
+			"image"=>$image,
+			"lastDispatch"=>time()*1000000,
+			"lastUpdate"=>time()*1000000,
+			"lastUpdatedBy"=>$who,
+			"personal"=>0,
+			"timeOffset"=>0,
+			"title"=>$title,
+			"description"=>$description,
+			"type"=>0,
+			"url"=>$url,
+			"who"=>0
+	       );
+
 print_r($newFeed);
 
-//$addFeedReturn=addFeed($feedinatorURL,$newFeed);
-#          <div class="col-sm-1" style="position: absolute; margin-top:22px; padding-left: 2px; margin-left: 4px; color: white">
-#            <i class="fa fa-car" aria-hidden="true"></i>
-#          </div>
+$addFeedReturn=addFeed($feedinatorURL,$newFeed);
 
 if ($addFeedReturn=='OK') {
 	echo "Thanks for submitting a new feed! We'll pull that data in within the next few minutes.";
